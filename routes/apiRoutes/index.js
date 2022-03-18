@@ -29,7 +29,7 @@ router.get("/notes", (req, res) => {
 });
 
 router.get("*", (req, res) => {
-  
+
 });
 
 router.post("/notes", (req, res) => {
@@ -49,6 +49,16 @@ router.delete("/notes:id", (req, res) => {
   //or '/api/notes/{id}'
   // const idNote = notes.
   //**read all notes from db.json file, remove note with given id prop, and rewrite notes to db.json file
-});
+  const note = fs.readFileSync(
+    path.join(__dirname, "../../db/db.json"),
+    "utf-8"
+  );
+  const deleteNote = fs.unlink("/notes:id", (err => {
+    if(err) throw err;
+    console.log("deleted note at id!")
+  })
+  //return JSON structure, rather than text
+  res.json(JSON.parse(note));
+  )};
 
 module.exports = router;
