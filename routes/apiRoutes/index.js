@@ -29,18 +29,19 @@ router.get("/notes", (req, res) => {
 });
 
 router.get("*", (req, res) => {
-
+  res.sendFile(path.join(__dirname, '../../public/index.html'));
 });
 
 router.post("/notes", (req, res) => {
   //**save to req.body with unique id, add it to db.json, and return new note to clt.
-  req.body.id = note.length.toString();
+  req.body.id = notes.length.toString();
   //add notes to db.json file and notes array in this fxn
   if (!validateNote(req.body)) {
     res.status(400).set("The note is not properly formatted.");
   } else {
-    const note = createNewNotes(req.body, note);
+    const note = createNewNote(req.body, notes);
     res.json(note);
+    console.log(note);
   }
 });
 
@@ -49,16 +50,18 @@ router.delete("/notes:id", (req, res) => {
   //or '/api/notes/{id}'
   // const idNote = notes.
   //**read all notes from db.json file, remove note with given id prop, and rewrite notes to db.json file
-  const note = fs.readFileSync(
-    path.join(__dirname, "../../db/db.json"),
+  const note = fs.readFileSync(path.join(__dirname, "../../db/db.json"),
     "utf-8"
   );
+
   const deleteNote = fs.unlink("/notes:id", (err => {
-    if(err) throw err;
-    console.log("deleted note at id!")
+    if(err) {
+      throw (err);
+    } else {
+      console.log("deleted note at id!")
+   }//return JSON structure, rather than text
+   res.json(JSON.parse(note));
   })
-  //return JSON structure, rather than text
-  res.json(JSON.parse(note));
-  )};
+)});
 
 module.exports = router;
