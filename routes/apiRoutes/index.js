@@ -1,7 +1,7 @@
 const fs = require("fs");
 const router = require("express").Router();
 const path = require("path");
-let notes = require('../../db/db.json')
+let notes = require("../../db/db.json");
 
 function createNewNote(body, noteArray) {
   const note = body;
@@ -30,28 +30,26 @@ router.get("/notes", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, '../../public/index.html'));
+  res.sendFile(path.join(__dirname, "../../public/index.html"));
 });
 
 router.post("/notes", (req, res) => {
   //**save to req.body with unique id, add it to db.json, and return new note to clt.
   const pushNote = req.body;
   notes.push(pushNote);
-  fs.writeFile('./db/db.json', JSON.stringify(notes), (err, data) => {
-    if (err) throw err
+  fs.writeFile("./db/db.json", JSON.stringify(notes), (err, data) => {
+    if (err) throw err;
   });
   res.json(notes);
 });
 
-// router.delete("/notes", (req, res) => {
-//   const deleteNote = req.body;
-//  fs.unlink("/notes:id", (err => {
-//     if(err) throw err;
-//  
-//       console.log("deleted note at id!")
-//    }//return JSON structure, rather than text
-//    res.json(JSON.parse(note));
-//   })
-// )});
+router.delete("/notes", (req, res) => {
+  const deleteNote = req.body;
+  notes.delete(deleteNote);
+  fs.unlink("./db/db.json", JSON.stringify(notes), (err, data) => {
+    if (err) throw err;
+    console.log("Successfully deleted note!");
+  });
+});
 
 module.exports = router;
