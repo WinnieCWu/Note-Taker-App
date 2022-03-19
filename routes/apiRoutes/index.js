@@ -1,15 +1,16 @@
 const fs = require("fs");
 const router = require("express").Router();
 const path = require("path");
+let notes = require('../../db/db.json')
 
-function createNewNote(body, notesArray) {
+function createNewNote(body, noteArray) {
   const note = body;
-  notesArray.push(note);
+  noteArray.push(note);
   //write fxn to db.json
   fs.writeFileSync(
     path.join(__dirname, "./db/db.json"),
     //convert the JS data array as JSON
-    JSON.stringify({ note: notesArray }, null, 2)
+    JSON.stringify({ note: noteArray }, null, 2)
   );
   //return finished code to post route for response
   return note;
@@ -28,40 +29,29 @@ router.get("/notes", (req, res) => {
   res.json(JSON.parse(note));
 });
 
-router.get("*", (req, res) => {
+router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, '../../public/index.html'));
 });
 
 router.post("/notes", (req, res) => {
   //**save to req.body with unique id, add it to db.json, and return new note to clt.
-  req.body.id = notes.length.toString();
-  //add notes to db.json file and notes array in this fxn
-  if (!validateNote(req.body)) {
-    res.status(400).set("The note is not properly formatted.");
-  } else {
-    const note = createNewNote(req.body, notes);
-    res.json(note);
-    console.log(note);
-  }
+  const pushNote = req.body;
+  notes.push(pushNote);
+  fs.writeFile('./db/db.json', JSON.stringify(notes), (err, data) => {
+    if (err) throw err
+  });
+  res.json(notes);
 });
 
-//
-router.delete("/notes:id", (req, res) => {
-  //or '/api/notes/{id}'
-  // const idNote = notes.
-  //**read all notes from db.json file, remove note with given id prop, and rewrite notes to db.json file
-  const note = fs.readFileSync(path.join(__dirname, "../../db/db.json"),
-    "utf-8"
-  );
-
-  const deleteNote = fs.unlink("/notes:id", (err => {
-    if(err) {
-      throw (err);
-    } else {
-      console.log("deleted note at id!")
-   }//return JSON structure, rather than text
-   res.json(JSON.parse(note));
-  })
-)});
+// router.delete("/notes", (req, res) => {
+//   const deleteNote = req.body;
+//  fs.unlink("/notes:id", (err => {
+//     if(err) throw err;
+//  
+//       console.log("deleted note at id!")
+//    }//return JSON structure, rather than text
+//    res.json(JSON.parse(note));
+//   })
+// )});
 
 module.exports = router;
