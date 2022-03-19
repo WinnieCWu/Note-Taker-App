@@ -3,18 +3,18 @@ const router = require("express").Router();
 const path = require("path");
 let notes = require("../../db/db.json");
 
-function createNewNote(body, noteArray) {
-  const note = body;
-  noteArray.push(note);
-  //write fxn to db.json
-  fs.writeFileSync(
-    path.join(__dirname, "./db/db.json"),
-    //convert the JS data array as JSON
-    JSON.stringify({ note: noteArray }, null, 2)
-  );
-  //return finished code to post route for response
-  return note;
-}
+// function createNewNote(body, noteArray) {
+//   const note = body;
+//   noteArray.push(note);
+//   //write fxn to db.json
+//   fs.writeFileSync(
+//     path.join(__dirname, "./db/db.json"),
+//     //convert the JS data array as JSON
+//     JSON.stringify({ note: noteArray }, null, 2)
+//   );
+//   //return finished code to post route for response
+//   return note;
+// }
 
 //1 job: respond with an HTML pg to display in the browser
 router.get("/notes", (req, res) => {
@@ -43,9 +43,9 @@ router.post("/notes", (req, res) => {
   res.json(notes);
 });
 
-router.delete("/notes", (req, res) => {
-  const deleteNote = req.body;
-  notes.delete(deleteNote);
+router.delete("/notes/:id", (req, res) => {
+  const deleteNote = req.params.id;
+  notes.pop(deleteNote);
   fs.unlink("./db/db.json", JSON.stringify(notes), (err, data) => {
     if (err) throw err;
     console.log("Successfully deleted note!");
