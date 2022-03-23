@@ -1,1 +1,12 @@
-[{"title":"Test Title","text":"Test text"},{"title":"New note","text":"new"},{"title":"Yay","text":"new notes"},{"title":"Hello","text":"new note"},{"title":"Blocked out new fxn","text":"Let's see if it works!"},{"title":"Run","text":"Run when it's not raining"},{"title":"Finish hw","text":"tonight"},{"title":"Pack up","text":"and sleep"}]
+[
+  {
+    "title": "New Note",
+    "text": "finish this",
+    "id": "3ab834dc-ffc4-4dfb-aa61-2206795cb87d"
+  },
+  {
+    "title": "Notes",
+    "text": "are coming",
+    "id": "e2e93697-5e77-4580-b745-8df86fe27faa"
+  }
+]
