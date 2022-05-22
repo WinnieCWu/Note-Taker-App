@@ -19,7 +19,7 @@ No extra installations are needed for the user, aside from a working computer an
 
 ## Usage
 
-Please check out the application on Heroku.
+Please check out the application on Heroku: http://enigmatic-mountain-89996.herokuapp.com/
 
 
 ## Credits
